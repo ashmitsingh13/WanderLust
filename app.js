@@ -3,6 +3,9 @@ const app = express();
 const mongoose = require("mongoose");
 const ejs = require("ejs");
 const Listing = require("./models/listing.js");
+const path = require('path')
+const methodOverride = require('method-override');
+app.use(methodOverride('_method'));
 
 main().then(() => {
     console.log("Connected to MongoDB");
@@ -15,6 +18,7 @@ async function main() {
 }
 
 app.set("view engine", "ejs");
+app.set('views', path.join(__dirname, "views"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
@@ -27,20 +31,50 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 }); 
 
-app.get("/listings", async (req, res) => {
-    let sampleListings = new Listing({
-      title: "Sample Listing",
-      description: "This is a sample listing description.",
-      image: ["https://images.unsplash.com/photo-1745894118353-88e64617e064?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"],
-      price: 100,
-      location: "Sample Location",
-      country: "Sample Country"
-    });
-    try {
-        await sampleListings.save();
-        console.log("Sample listing saved successfully");
-        res.send("Sample listing saved successfully");
-    } catch (err) {
-        console.error("Error saving sample listing:", err);
-    }
+
+//Index Route
+app.get('/listings',async(req,res)=>{
+  const allListings = await Listing.find({});
+  res.render('index.ejs',{allListings})
+})
+
+//New Route
+app.get('/listings/new', (req, res) => {
+  res.render('new.ejs');
+});
+
+//Show Route
+app.get('/listings/:id', async (req, res) => {
+  let {id} = req.params;
+  const listing = await Listing.findById(id);
+  res.render('show.ejs', { listing });
+});
+
+//Create Route
+app.post('/listings', async (req, res) => {
+  const newListing = new Listing (req.body.listing);
+  await newListing.save();
+  res.redirect('/listings');
+});
+
+//Edit Route
+app.get('/listings/:id/edit', async (req, res) => {
+  let {id} = req.params;
+  const listing = await Listing.findById(id);
+  res.render('edit.ejs', { listing });
+});
+
+//Update Route
+app.put('/listings/:id', async (req, res) => {
+  let {id} = req.params;
+  const updatedListing = await Listing.findByIdAndUpdate(id, {...req.body.listing});
+  res.redirect(`/listings/${id}`);
+});
+
+//Delete Route
+app.delete('/listings/:id', async (req, res) => {
+  let {id} = req.params;
+  await Listing.findByIdAndDelete(id);
+  console.log(`Listing with id ${id} deleted`);
+  res.redirect('/listings');
 });
