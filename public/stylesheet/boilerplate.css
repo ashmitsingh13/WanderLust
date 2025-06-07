@@ -8,9 +8,17 @@
 html,body{
     height: 100%;
     width: 100%;
-    font-family: "Plus Jakarta Sans", sans-serif;
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+}
+body{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
+.container{
+    flex: 1;
+}
 .navbar{
     background-color: white;
 }
@@ -79,3 +87,41 @@ html,body{
 .card-text p{
     font-weight: 400 !important;
 }
+
+.listing-links{
+    text-decoration: none;
+}
+
+/* Card Effect */
+
+.card-img-overlay{
+    opacity: 0;
+}
+
+.card-img-overlay:hover{
+    opacity: 0.2;
+    background-color: white;
+}
+
+/* New Page */
+.add-btn{
+    background-color: #fe424d !important;
+    border: none !important;
+}
+
+/* Edit Page  */
+
+.edit-btn{
+     background-color: #fe424d !important;
+    border: none !important;
+}
+
+ /* Show Page */
+ .show-img{
+    height: 30vh;
+ }
+
+ .show-card{
+    padding-left: 0;
+    padding-right: 0;
+ }
