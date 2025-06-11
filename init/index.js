@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const initData = require("./data.js");
-const Listing = require("../models/listing.js");
+const Listing = require("./models/listing.js");
 
 main().then(() => {
     console.log("Connected to MongoDB");
