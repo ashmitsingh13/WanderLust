@@ -39,9 +39,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
-});
 
 
 const store = MongoStore.create({
@@ -93,3 +90,8 @@ app.use((err, req, res, next) => {
   let { statusCode = 500, message = "Something went wrong!" } = err;
   res.status(statusCode).render("error.ejs", { message })
 })
+
+
+app.listen(3000, () => {
+  console.log("Server is running on port 3000");
+});
