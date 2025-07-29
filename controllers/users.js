@@ -40,3 +40,7 @@ module.exports.logout = (req, res, next) => {
     res.redirect("/listings");
   });
 }
+
+module.exports.homePage = (req, res, next)=>{
+  res.render("index.ejs")
+}
